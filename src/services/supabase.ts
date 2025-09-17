@@ -1,11 +1,31 @@
 import { createClient } from '@supabase/supabase-js';
 import { Listing } from '../types';
 
-// These will need to be replaced with your actual Supabase credentials
-const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
+// Demo mode for Expo Snack - replace with real credentials when running locally
+const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://demo.supabase.co';
+const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'demo-key-for-snack';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Create a mock client for demo purposes if no real credentials
+const createMockClient = () => ({
+  storage: {
+    from: () => ({
+      upload: () => Promise.resolve({ data: null, error: null }),
+      getPublicUrl: () => ({ data: { publicUrl: 'https://placeholder.com/image.jpg' } })
+    })
+  },
+  from: () => ({
+    insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: null }) }) }),
+    select: () => ({
+      eq: () => ({
+        order: () => Promise.resolve({ data: [], error: null })
+      })
+    })
+  })
+});
+
+export const supabase = (SUPABASE_URL === 'https://demo.supabase.co') 
+  ? createMockClient() as any
+  : createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export async function uploadImage(base64Image: string): Promise<string | null> {
   try {
