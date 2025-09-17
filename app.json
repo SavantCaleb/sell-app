@@ -1,29 +1,70 @@
 {
   "expo": {
-    "name": "sell-app",
+    "name": "SELL",
     "slug": "sell-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.yourcompany.sell",
+      "infoPlist": {
+        "NSCameraUsageDescription": "SELL needs camera access to capture items you want to sell",
+        "NSMicrophoneUsageDescription": "SELL needs microphone access to record your item description",
+        "NSPhotoLibraryUsageDescription": "SELL needs photo library access to save captured images"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "package": "com.yourcompany.sell",
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow SELL to access your camera to capture items you want to sell"
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow SELL to access your microphone to record item descriptions"
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow SELL to access your photos",
+          "savePhotosPermission": "Allow SELL to save photos"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "auto"
+      }
+    },
+    "owner": "calebbenedict"
   }
 }

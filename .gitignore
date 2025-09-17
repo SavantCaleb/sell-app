@@ -32,6 +32,8 @@ yarn-error.*
 
 # local env files
 .env*.local
+.env
+.env.production
 
 # typescript
 *.tsbuildinfo
@@ -39,3 +41,24 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Backend specific
+backend/node_modules/
+backend/.env
+backend/dist/
+
+# Playwright
+backend/playwright-report/
+backend/test-results/
+
+# Editor directories
+.idea
+.vscode
+
+# Logs
+logs
+*.log
+
+# Temporary files
+tmp/
+temp/
