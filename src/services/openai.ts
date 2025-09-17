@@ -1,8 +1,13 @@
-// Temporarily using fetch API instead of OpenAI SDK for Snack compatibility
+import OpenAI from 'openai';
 import { Listing } from '../types';
 import { transcribeAudioWithDeepgram } from './deepgram';
 
 const OPENAI_API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY || 'YOUR_OPENAI_API_KEY';
+
+const openai = new OpenAI({
+  apiKey: OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true, // For React Native
+});
 
 export async function transcribeAudio(audioUri: string): Promise<string> {
   try {
@@ -39,36 +44,27 @@ Output JSON only:
   "category": "string"
 }`;
 
-    // Using fetch API for OpenAI
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4-vision-preview',
-        messages: [
-          {
-            role: 'user',
-            content: [
-              { type: 'text', text: prompt },
-              { 
-                type: 'image_url', 
-                image_url: {
-                  url: `data:image/jpeg;base64,${imageBase64}`,
-                }
-              },
-            ],
-          },
-        ],
-        max_tokens: 500,
-        response_format: { type: 'json_object' },
-      }),
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4-vision-preview',
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            { 
+              type: 'image_url', 
+              image_url: {
+                url: `data:image/jpeg;base64,${imageBase64}`,
+              }
+            },
+          ],
+        },
+      ],
+      max_tokens: 500,
+      response_format: { type: 'json_object' },
     });
 
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
+    const content = response.choices[0]?.message?.content;
     if (!content) throw new Error('No response from OpenAI');
     
     const listing = JSON.parse(content) as Listing;
@@ -98,36 +94,27 @@ Output JSON only:
   "category": "string"
 }`;
 
-    // Using fetch API for OpenAI
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4-vision-preview',
-        messages: [
-          {
-            role: 'user',
-            content: [
-              { type: 'text', text: prompt },
-              { 
-                type: 'image_url', 
-                image_url: {
-                  url: `data:image/jpeg;base64,${imageBase64}`,
-                }
-              },
-            ],
-          },
-        ],
-        max_tokens: 500,
-        response_format: { type: 'json_object' },
-      }),
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4-vision-preview',
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            { 
+              type: 'image_url', 
+              image_url: {
+                url: `data:image/jpeg;base64,${imageBase64}`,
+              }
+            },
+          ],
+        },
+      ],
+      max_tokens: 500,
+      response_format: { type: 'json_object' },
     });
 
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
+    const content = response.choices[0]?.message?.content;
     if (!content) throw new Error('No response from OpenAI');
     
     const listing = JSON.parse(content) as Listing;
